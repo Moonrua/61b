@@ -113,7 +113,45 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        // 列从左向右扫 行从下向上扫
+        this.board.setViewingPerspective(side);
+        for(int i=0;i<this.size();i++){
+            int boundary=this.size();
+            for(int j=this.size()-2;j>=0;j--){
+                int obj=0;
+                if(board.tile(i,j)!=null){
+                    obj=board.tile(i,j).value();
+                }
 
+                if(obj!=0){//找到被操作的格 计算向上移动
+                    for(int rec=j+1;rec<boundary;rec++){
+                        // 向上找到有数字的格
+                        if(board.tile(i,rec)!=null){
+                            // 找到有数字的格子 并非相等 移到下面
+                            if(board.tile(i,rec).value() != obj){
+                                board.move(i,rec-1,board.tile(i,j));
+                                changed=true;
+                                break;
+                            }
+                            // 有数字的格子并且相等 合并
+                            else{
+                                board.move(i,rec,board.tile(i,j));
+                                score+=2*obj;
+                                changed=true;
+                                boundary=rec;
+                            }
+                        }
+                        // 找不到 即指针到最上面时候 移动到最上面
+                        else if(rec == boundary-1){
+                            board.move(i,rec,board.tile(i,j));
+                            changed=true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        this.board.setViewingPerspective(side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
