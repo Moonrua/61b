@@ -117,13 +117,13 @@ public class Model extends Observable {
         this.board.setViewingPerspective(side);
         for(int i=0;i<this.size();i++){
             int boundary=this.size();
-            for(int j=this.size()-2;j>=0;j--){
+            for(int j=this.size()-2;j>=0;j--){ // 从上向下扫
                 int obj=0;
                 if(board.tile(i,j)!=null){
                     obj=board.tile(i,j).value();
                 }
 
-                if(obj!=0){//找到被操作的格 计算向上移动
+                if(obj!=0){// 找到被操作的格 计算向上移动
                     for(int rec=j+1;rec<boundary;rec++){
                         // 向上找到有数字的格
                         if(board.tile(i,rec)!=null){
